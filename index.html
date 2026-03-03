@@ -1,0 +1,1362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Comedian</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* ============================================
+           BASE STYLES
+           ============================================ */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        font-size: 16px; /* Base size for mobile */
+      }
+
+      body {
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+          Arial, sans-serif;
+        background-color: #ffffff;
+        color: #000000;
+        line-height: 1.6;
+      }
+
+      /* ============================================
+           CONTAINER & LAYOUT
+           ============================================ */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+      }
+
+      /* ============================================
+           HEADER
+           ============================================ */
+      header {
+        text-align: center;
+        padding: 2rem 0;
+        border-bottom: 1px solid #e0e0e0;
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+      }
+
+      .tagline {
+        font-size: 1rem;
+        color: #666666;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+      }
+
+      /* ============================================
+           SECTIONS
+           ============================================ */
+      section {
+        margin-bottom: 3rem;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        border-bottom: 2px solid #000000;
+        padding-bottom: 0.5rem;
+      }
+
+      /* ============================================
+           ABOUT SECTION
+           ============================================ */
+      #about p {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: #333333;
+      }
+
+      /* ============================================
+           SHOWS SECTION
+           ============================================ */
+      .show {
+        padding: 1.5rem;
+        border-left: 4px solid #000000;
+        margin-bottom: 1.5rem;
+        background-color: #f9f9f9;
+        transition: background-color 0.3s ease;
+      }
+
+      .show:hover {
+        background-color: #f0f0f0;
+      }
+
+      .show-date {
+        font-size: 0.95rem;
+        color: #666666;
+        margin-bottom: 0.25rem;
+      }
+
+      .show-venue {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+        color: #000000;
+      }
+
+      .show-location {
+        font-size: 0.95rem;
+        color: #666666;
+      }
+
+      .no-shows {
+        text-align: center;
+        color: #999999;
+        padding: 2rem;
+        font-size: 1rem;
+        font-style: italic;
+      }
+
+      /* ============================================
+           CONTACT SECTION
+           ============================================ */
+      .contact-item {
+        margin-bottom: 2rem;
+      }
+
+      .contact-label {
+        font-size: 0.95rem;
+        margin-bottom: 1rem;
+        color: #666666;
+        font-weight: 500;
+      }
+
+      .email-link {
+        display: inline-block;
+        font-size: 1rem;
+        color: #000000;
+        text-decoration: none;
+        padding: 0.75rem 1.5rem;
+        border: 2px solid #000000;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+      }
+
+      .email-link:hover {
+        background-color: #000000;
+        color: #ffffff;
+      }
+
+      /* ============================================
+           SOCIAL ICONS
+           ============================================ */
+      .social-icons {
+        display: flex;
+        justify-content: flex-start;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+      }
+
+      .social-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid #000000;
+        color: #000000;
+        font-size: 1.25rem;
+        text-decoration: none;
+        transition: all 0.3s ease;
+      }
+
+      .social-icon:hover {
+        background-color: #000000;
+        color: #ffffff;
+        transform: scale(1.1);
+      }
+
+      .social-icon:active {
+        transform: scale(0.95);
+      }
+
+      /* ============================================
+           FOOTER
+           ============================================ */
+      footer {
+        text-align: center;
+        padding: 2rem 0;
+        border-top: 1px solid #e0e0e0;
+        color: #999999;
+        font-size: 0.9rem;
+        margin-top: 3rem;
+      }
+
+      /* ============================================
+           NOSCRIPT FALLBACK
+           ============================================ */
+      noscript {
+        display: block;
+        text-align: center;
+        padding: 2rem;
+        background-color: #f5f5f5;
+        color: #666666;
+        font-size: 1rem;
+        border-radius: 4px;
+        margin: 2rem;
+      }
+
+      /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+      @media (max-width: 600px) {
+        html {
+          font-size: 14px;
+        }
+
+        .container {
+          padding: 1.5rem;
+        }
+
+        header {
+          padding: 1.5rem 0;
+          margin-bottom: 1.5rem;
+        }
+
+        h1 {
+          font-size: 2rem;
+        }
+
+        h2 {
+          font-size: 1.25rem;
+          margin-bottom: 1rem;
+        }
+
+        .show {
+          padding: 1rem;
+          margin-bottom: 1rem;
+        }
+
+        section {
+          margin-bottom: 2rem;
+        }
+
+        .social-icons {
+          gap: 1rem;
+        }
+
+        .social-icon {
+          width: 40px;
+          height: 40px;
+          font-size: 1.1rem;
+        }
+      }
+
+      @media (min-width: 900px) {
+        html {
+          font-size: 18px;
+        }
+
+        .container {
+          padding: 3rem 2rem;
+        }
+      }
+
+      /* ============================================
+           EDIT MODE STYLES
+           ============================================ */
+      .edit-btn {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+      }
+
+      .edit-btn:hover {
+        transform: scale(1.1);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      }
+
+      .edit-btn:active {
+        transform: scale(0.95);
+      }
+
+      .edit-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        overflow-y: auto;
+        padding: 1rem;
+      }
+
+      .edit-modal.active {
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding-top: 2rem;
+      }
+
+      .edit-modal-content {
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 2rem;
+        width: 100%;
+        max-width: 600px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      }
+
+      .edit-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+        border-bottom: 2px solid #000000;
+        padding-bottom: 1rem;
+      }
+
+      .edit-modal-header h3 {
+        font-size: 1.5rem;
+        margin: 0;
+      }
+
+      .close-btn {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #000000;
+        padding: 0;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .close-btn:hover {
+        color: #666666;
+      }
+
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+        font-size: 0.95rem;
+        color: #000000;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: border-color 0.2s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #000000;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .shows-section {
+        background-color: #f9f9f9;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+      }
+
+      .show-item {
+        background-color: #ffffff;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .show-item input {
+        font-size: 0.9rem;
+      }
+
+      .show-item-actions {
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .remove-show-btn,
+      .add-show-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #999999;
+        background-color: #ffffff;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+      }
+
+      .remove-show-btn:hover {
+        background-color: #ffecec;
+        border-color: #cc0000;
+        color: #cc0000;
+      }
+
+      .add-show-btn:hover {
+        background-color: #f0f0f0;
+        border-color: #000000;
+      }
+
+      .social-section {
+        background-color: #f9f9f9;
+        padding: 1.5rem;
+        border-radius: 4px;
+        margin-bottom: 1.5rem;
+      }
+
+      .social-item {
+        background-color: #ffffff;
+        padding: 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 4px;
+        margin-bottom: 1rem;
+        display: grid;
+        gap: 0.75rem;
+      }
+
+      .social-item input {
+        font-size: 0.9rem;
+      }
+
+      .remove-social-btn {
+        padding: 0.5rem 1rem;
+        border: 1px solid #999999;
+        background-color: #ffffff;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.2s ease;
+      }
+
+      .remove-social-btn:hover {
+        background-color: #ffecec;
+        border-color: #cc0000;
+        color: #cc0000;
+      }
+
+      .add-social-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+      }
+
+      .add-social-btn:hover {
+        background-color: #333333;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #e0e0e0;
+      }
+
+      .modal-btn {
+        flex: 1;
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 0.95rem;
+      }
+
+      .save-btn {
+        background-color: #000000;
+        color: #ffffff;
+      }
+
+      .save-btn:hover {
+        background-color: #333333;
+      }
+
+      .cancel-btn {
+        background-color: #f0f0f0;
+        color: #000000;
+        border: 1px solid #e0e0e0;
+      }
+
+      .cancel-btn:hover {
+        background-color: #e0e0e0;
+      }
+
+      .reset-btn {
+        background-color: #ffecec;
+        color: #cc0000;
+        border: 1px solid #ffcccc;
+      }
+
+      .reset-btn:hover {
+        background-color: #ffdddd;
+      }
+
+      /* ============================================
+           ADMIN LOGIN STYLES
+           ============================================ */
+      .admin-login-modal {
+        display: flex;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 2000;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+      }
+
+      .admin-login-modal.hidden {
+        display: none;
+      }
+
+      .login-box {
+        background-color: #ffffff;
+        border-radius: 8px;
+        padding: 2rem;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .login-box h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        border: none;
+        padding-bottom: 0;
+      }
+
+      .login-box p {
+        color: #666666;
+        margin-bottom: 2rem;
+        font-size: 0.95rem;
+      }
+
+      .login-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .login-form input {
+        padding: 0.75rem;
+        border: 1px solid #cccccc;
+        border-radius: 4px;
+        font-size: 1rem;
+        font-family: inherit;
+      }
+
+      .login-form input:focus {
+        outline: none;
+        border-color: #000000;
+        box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+      }
+
+      .login-form button {
+        padding: 0.75rem;
+        background-color: #000000;
+        color: #ffffff;
+        border: none;
+        border-radius: 4px;
+        font-weight: 600;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: all 0.2s ease;
+      }
+
+      .login-form button:hover {
+        background-color: #333333;
+      }
+
+      .login-error {
+        color: #cc0000;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        display: none;
+      }
+
+      .login-error.show {
+        display: block;
+      }
+
+      .admin-status {
+        position: fixed;
+        top: 1rem;
+        right: 1rem;
+        background-color: #000000;
+        color: #ffffff;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        display: none;
+        z-index: 999;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .admin-status.active {
+        display: flex;
+      }
+
+      .admin-status-dot {
+        display: inline-block;
+        width: 8px;
+        height: 8px;
+        background-color: #00ff00;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.5;
+        }
+      }
+
+      .logout-btn {
+        background: none;
+        border: none;
+        color: #ffffff;
+        cursor: pointer;
+        text-decoration: underline;
+        font-size: 0.85rem;
+        padding: 0;
+        margin-left: 0.5rem;
+      }
+
+      .logout-btn:hover {
+        opacity: 0.8;
+      }
+
+      @media (max-width: 600px) {
+        .edit-btn {
+          bottom: 1.5rem;
+          right: 1.5rem;
+          width: 48px;
+          height: 48px;
+          font-size: 1.25rem;
+        }
+
+        .edit-modal-content {
+          padding: 1.5rem;
+          border-radius: 12px 12px 0 0;
+          margin-top: auto;
+        }
+
+        .edit-modal.active {
+          justify-content: flex-end;
+          padding: 0;
+        }
+
+        .admin-status {
+          top: auto;
+          bottom: 80px;
+          right: 1rem;
+        }
+
+        .login-box {
+          padding: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============================================
+         HOW TO EDIT THIS SITE:
+         
+         Click the EDIT BUTTON (floating pencil icon)
+         at the bottom-right of the page.
+         
+         You can now edit everything directly in your
+         browser:
+         - Change name, tagline, and bio
+         - Add or remove shows
+         - Add or remove social media links
+         - Update email and footer text
+         
+         Click "Save Changes" and your edits are saved
+         to your device (localStorage). They'll be there
+         every time you reload the page.
+         
+         This is perfect for testing before you push
+         to GitHub and deploy to Vercel!
+         ============================================ -->
+
+    <div class="container">
+      <!-- ============================================
+             HEADER
+             ============================================ -->
+      <header>
+        <h1 id="site-name"></h1>
+        <p class="tagline" id="site-tagline"></p>
+      </header>
+
+      <!-- ============================================
+             ABOUT ME SECTION
+             ============================================ -->
+      <section id="about">
+        <h2>About Me</h2>
+        <p id="site-bio"></p>
+      </section>
+
+      <!-- ============================================
+             UPCOMING SHOWS SECTION
+             ============================================ -->
+      <section id="shows">
+        <h2>Upcoming Shows</h2>
+        <div id="shows-list"></div>
+      </section>
+
+      <!-- ============================================
+             CONTACT SECTION
+             ============================================ -->
+      <section id="contact">
+        <h2>Contact</h2>
+        <div class="contact-item">
+          <p class="contact-label">Email</p>
+          <a href="#" class="email-link" id="email-link"></a>
+        </div>
+        <div class="contact-item">
+          <p class="contact-label">Follow</p>
+          <div class="social-icons" id="social-icons"></div>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer id="site-footer"></footer>
+
+    <!-- ============================================
+         ADMIN LOGIN MODAL
+         ============================================ -->
+    <div class="admin-login-modal" id="admin-login-modal">
+      <div class="login-box">
+        <h2>Admin Access</h2>
+        <p>Enter your admin password to edit this website</p>
+        <form class="login-form" id="login-form">
+          <input
+            type="password"
+            id="admin-password"
+            placeholder="Enter admin password"
+            required
+            autofocus
+          />
+          <button type="submit">Sign In</button>
+          <div class="login-error" id="login-error">Incorrect password</div>
+        </form>
+      </div>
+    </div>
+
+    <!-- ============================================
+         ADMIN STATUS INDICATOR
+         ============================================ -->
+    <div class="admin-status" id="admin-status">
+      <span class="admin-status-dot"></span>
+      <span>Admin Mode</span>
+      <button class="logout-btn" id="logout-btn">Logout</button>
+    </div>
+
+    <!-- ============================================
+         EDIT BUTTON
+         ============================================ -->
+    <button class="edit-btn" id="edit-btn" title="Edit site content">
+      <i class="fas fa-edit"></i>
+    </button>
+
+    <!-- ============================================
+         EDIT MODAL
+         ============================================ -->
+    <div class="edit-modal" id="edit-modal">
+      <div class="edit-modal-content">
+        <div class="edit-modal-header">
+          <h3>Edit Your Website</h3>
+          <button class="close-btn" id="close-modal-btn">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+
+        <form id="edit-form">
+          <!-- Name, Tagline, Bio -->
+          <div class="form-group">
+            <label for="edit-name">Name</label>
+            <input
+              type="text"
+              id="edit-name"
+              placeholder="Your Name"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="edit-tagline">Tagline</label>
+            <input
+              type="text"
+              id="edit-tagline"
+              placeholder="Comedian | Storyteller"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="edit-bio">Bio</label>
+            <textarea
+              id="edit-bio"
+              placeholder="Tell us about yourself..."
+              required
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-email">Email</label>
+            <input
+              type="email"
+              id="edit-email"
+              placeholder="hello@example.com"
+              required
+            />
+          </div>
+
+          <!-- Upcoming Shows -->
+          <div class="shows-section">
+            <label
+              style="
+                font-weight: 600;
+                font-size: 1rem;
+                margin-bottom: 1rem;
+                display: block;
+              "
+              >Upcoming Shows</label
+            >
+            <div id="shows-container"></div>
+            <button
+              type="button"
+              class="add-show-btn"
+              id="add-show-btn"
+              style="width: 100%"
+            >
+              + Add Show
+            </button>
+          </div>
+
+          <!-- Social Media -->
+          <div class="social-section">
+            <label
+              style="
+                font-weight: 600;
+                font-size: 1rem;
+                margin-bottom: 1rem;
+                display: block;
+              "
+              >Social Media</label
+            >
+            <div id="social-container"></div>
+            <button
+              type="button"
+              class="add-social-btn"
+              id="add-social-btn"
+              style="width: 100%"
+            >
+              + Add Social Link
+            </button>
+          </div>
+
+          <!-- Footer -->
+          <div class="form-group">
+            <label for="edit-footer">Footer Text</label>
+            <input
+              type="text"
+              id="edit-footer"
+              placeholder="© 2025 Your Name."
+              required
+            />
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="modal-actions">
+            <button type="button" class="modal-btn reset-btn" id="reset-btn">
+              Reset to Defaults
+            </button>
+            <button type="button" class="modal-btn cancel-btn" id="cancel-btn">
+              Cancel
+            </button>
+            <button type="submit" class="modal-btn save-btn">
+              Save Changes
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Fallback message if JavaScript is disabled -->
+    <noscript>
+      <p>
+        <strong>JavaScript is required</strong><br />This site needs JavaScript
+        to display content. Please enable JavaScript in your browser settings.
+      </p>
+    </noscript>
+
+    <!-- ============================================
+         JAVASCRIPT - POPULATES CONTENT FROM siteData
+         ============================================ -->
+    <script>
+      // ============================================
+      // ADMIN CONFIGURATION
+      // ============================================
+      // IMPORTANT: Change this to a unique password only you know!
+      // Once deployed, you can change it anytime by editing this value.
+      const ADMIN_PASSWORD = "password123";
+
+      // ============================================
+      // SESSION & STORAGE MANAGEMENT
+      // ============================================
+      const STORAGE_KEY = "comedianWebsiteData";
+      const ADMIN_SESSION_KEY = "adminLoggedIn";
+
+      // Check if admin is already logged in
+      function isAdminLoggedIn() {
+        return sessionStorage.getItem(ADMIN_SESSION_KEY) === "true";
+      }
+
+      function setAdminLoggedIn(value) {
+        if (value) {
+          sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+        } else {
+          sessionStorage.removeItem(ADMIN_SESSION_KEY);
+        }
+        updateAdminUI();
+      }
+
+      // ============================================
+      // CONFIGURATION & CONSTANTS
+      // ============================================
+      const iconMap = {
+        instagram: "fab fa-instagram",
+        twitter: "fab fa-twitter",
+        facebook: "fab fa-facebook",
+        youtube: "fab fa-youtube",
+        tiktok: "fab fa-tiktok",
+        linkedin: "fab fa-linkedin",
+        github: "fab fa-github",
+        twitch: "fab fa-twitch",
+        spotify: "fab fa-spotify",
+      };
+
+      // ============================================
+      // LOAD DATA FROM LOCALSTORAGE OR USE DEFAULT
+      // ============================================
+      let siteData = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {
+        name: "Your Name",
+        tagline: "Comedian | Storyteller | Funny Person",
+        bio: "I'm a stand-up comedian based in [City]. I've performed at The Comedy Cellar, Laugh Factory, and festivals across the country. I tell jokes about everyday life, relationships, and the absurdity of being human.",
+        shows: [
+          {
+            date: "May 15, 2025",
+            venue: "The Comedy Cellar",
+            city: "New York, NY",
+            time: "8:00 PM",
+          },
+          {
+            date: "May 22, 2025",
+            venue: "Laugh Factory",
+            city: "Los Angeles, CA",
+            time: "9:30 PM",
+          },
+          {
+            date: "June 5, 2025",
+            venue: "The Improv",
+            city: "Chicago, IL",
+            time: "7:30 PM",
+          },
+        ],
+        email: "hello@yourname.com",
+        social: {
+          instagram: "https://instagram.com/yourusername",
+          twitter: "https://twitter.com/yourusername",
+          facebook: "https://facebook.com/yourusername",
+        },
+        footer: "© 2025 Your Name. All rights reserved.",
+      };
+
+      // Keep a copy of defaults for reset
+      const defaultData = JSON.parse(JSON.stringify(siteData));
+
+      // ============================================
+      // ADMIN UI MANAGEMENT
+      // ============================================
+      function updateAdminUI() {
+        const editBtn = document.getElementById("edit-btn");
+        const adminStatus = document.getElementById("admin-status");
+        const loginModal = document.getElementById("admin-login-modal");
+
+        if (isAdminLoggedIn()) {
+          editBtn.style.display = "flex";
+          adminStatus.classList.add("active");
+          loginModal.classList.add("hidden");
+        } else {
+          editBtn.style.display = "none";
+          adminStatus.classList.remove("active");
+          loginModal.classList.remove("hidden");
+        }
+      }
+
+      // ============================================
+      // RENDER FUNCTIONS
+      // ============================================
+      function renderPage() {
+        // Header
+        document.getElementById("site-name").textContent = siteData.name;
+        document.getElementById("site-tagline").textContent = siteData.tagline;
+        document.title = siteData.name;
+
+        // About
+        document.getElementById("site-bio").textContent = siteData.bio;
+
+        // Shows
+        const showsList = document.getElementById("shows-list");
+        if (siteData.shows && siteData.shows.length > 0) {
+          showsList.innerHTML = siteData.shows
+            .map(
+              (show) => `
+                <div class="show">
+                    <div class="show-date">${show.date} • ${show.time}</div>
+                    <div class="show-venue">${show.venue}</div>
+                    <div class="show-location">${show.city}</div>
+                </div>
+            `,
+            )
+            .join("");
+        } else {
+          showsList.innerHTML =
+            '<div class="no-shows">No shows scheduled right now. Check back soon!</div>';
+        }
+
+        // Email
+        const emailLink = document.getElementById("email-link");
+        emailLink.href = `mailto:${siteData.email}`;
+        emailLink.textContent = siteData.email;
+
+        // Social
+        const socialIcons = document.getElementById("social-icons");
+        if (siteData.social && Object.keys(siteData.social).length > 0) {
+          socialIcons.innerHTML = Object.entries(siteData.social)
+            .map(([platform, url]) => {
+              const iconClass =
+                iconMap[platform.toLowerCase()] || "fas fa-link";
+              const platformName =
+                platform.charAt(0).toUpperCase() + platform.slice(1);
+              return `
+                    <a href="${url}" target="_blank" rel="noopener noreferrer" 
+                       class="social-icon" title="Visit us on ${platformName}" 
+                       aria-label="${platformName}">
+                        <i class="${iconClass}"></i>
+                    </a>
+                `;
+            })
+            .join("");
+        }
+
+        // Footer
+        document.getElementById("site-footer").textContent = siteData.footer;
+      }
+
+      function renderEditForm() {
+        // Basic fields
+        document.getElementById("edit-name").value = siteData.name;
+        document.getElementById("edit-tagline").value = siteData.tagline;
+        document.getElementById("edit-bio").value = siteData.bio;
+        document.getElementById("edit-email").value = siteData.email;
+        document.getElementById("edit-footer").value = siteData.footer;
+
+        // Shows
+        const showsContainer = document.getElementById("shows-container");
+        showsContainer.innerHTML = (siteData.shows || [])
+          .map(
+            (show, idx) => `
+          <div class="show-item">
+            <input type="text" placeholder="Date (e.g., May 15, 2025)" data-show-field="date" data-idx="${idx}" value="${show.date}">
+            <input type="text" placeholder="Venue name" data-show-field="venue" data-idx="${idx}" value="${show.venue}">
+            <input type="text" placeholder="City, State" data-show-field="city" data-idx="${idx}" value="${show.city}">
+            <input type="text" placeholder="Time (e.g., 8:00 PM)" data-show-field="time" data-idx="${idx}" value="${show.time}">
+            <div class="show-item-actions">
+              <button type="button" class="remove-show-btn" data-idx="${idx}">
+                <i class="fas fa-trash"></i> Remove
+              </button>
+            </div>
+          </div>
+        `,
+          )
+          .join("");
+
+        // Social
+        const socialContainer = document.getElementById("social-container");
+        socialContainer.innerHTML = Object.entries(siteData.social || {})
+          .map(
+            ([platform, url], idx) => `
+          <div class="social-item">
+            <input type="text" placeholder="Platform (e.g., instagram)" data-social-field="platform" data-idx="${idx}" value="${platform}" readonly>
+            <input type="url" placeholder="https://..." data-social-field="url" data-idx="${idx}" value="${url}">
+            <button type="button" class="remove-social-btn" data-idx="${idx}">
+              <i class="fas fa-trash"></i> Remove
+            </button>
+          </div>
+        `,
+          )
+          .join("");
+
+        // Re-attach event listeners
+        attachFormListeners();
+      }
+
+      function attachFormListeners() {
+        // Remove show buttons
+        document.querySelectorAll(".remove-show-btn").forEach((btn) => {
+          btn.onclick = (e) => {
+            e.preventDefault();
+            const idx = parseInt(btn.getAttribute("data-idx"));
+            siteData.shows.splice(idx, 1);
+            renderEditForm();
+          };
+        });
+
+        // Add show button
+        document.getElementById("add-show-btn").onclick = (e) => {
+          e.preventDefault();
+          siteData.shows.push({
+            date: "",
+            venue: "",
+            city: "",
+            time: "",
+          });
+          renderEditForm();
+        };
+
+        // Remove social buttons
+        document.querySelectorAll(".remove-social-btn").forEach((btn) => {
+          btn.onclick = (e) => {
+            e.preventDefault();
+            const idx = parseInt(btn.getAttribute("data-idx"));
+            const platforms = Object.keys(siteData.social);
+            delete siteData.social[platforms[idx]];
+            renderEditForm();
+          };
+        });
+
+        // Add social button
+        document.getElementById("add-social-btn").onclick = (e) => {
+          e.preventDefault();
+          const platform = prompt(
+            "Enter platform name (instagram, twitter, facebook, youtube, tiktok, linkedin, github, twitch, spotify):",
+          );
+          if (platform) {
+            const url = prompt(`Enter URL for ${platform}:`);
+            if (url) {
+              siteData.social[platform] = url;
+              renderEditForm();
+            }
+          }
+        };
+      }
+
+      // ============================================
+      // MODAL EVENT LISTENERS
+      // ============================================
+      const editBtn = document.getElementById("edit-btn");
+      const editModal = document.getElementById("edit-modal");
+      const closeModalBtn = document.getElementById("close-modal-btn");
+      const cancelBtn = document.getElementById("cancel-btn");
+      const editForm = document.getElementById("edit-form");
+      const resetBtn = document.getElementById("reset-btn");
+
+      // ============================================
+      // ADMIN LOGIN HANDLER
+      // ============================================
+      document.getElementById("login-form").onsubmit = (e) => {
+        e.preventDefault();
+        const passwordInput = document.getElementById("admin-password");
+        const errorMsg = document.getElementById("login-error");
+
+        if (passwordInput.value === ADMIN_PASSWORD) {
+          errorMsg.classList.remove("show");
+          setAdminLoggedIn(true);
+          passwordInput.value = "";
+        } else {
+          errorMsg.classList.add("show");
+          passwordInput.focus();
+        }
+      };
+
+      // ============================================
+      // LOGOUT HANDLER
+      // ============================================
+      document.getElementById("logout-btn").onclick = () => {
+        if (confirm("Log out of admin mode?")) {
+          setAdminLoggedIn(false);
+          document.getElementById("admin-password").value = "";
+        }
+      };
+
+      // ============================================
+      // EDIT MODAL LISTENERS
+      // ============================================
+
+      editBtn.onclick = () => {
+        editModal.classList.add("active");
+        renderEditForm();
+      };
+
+      closeModalBtn.onclick = () => {
+        editModal.classList.remove("active");
+      };
+
+      cancelBtn.onclick = () => {
+        editModal.classList.remove("active");
+      };
+
+      editModal.onclick = (e) => {
+        if (e.target === editModal) {
+          editModal.classList.remove("active");
+        }
+      };
+
+      resetBtn.onclick = (e) => {
+        e.preventDefault();
+        if (confirm("Reset to default content? This cannot be undone.")) {
+          siteData = JSON.parse(JSON.stringify(defaultData));
+          localStorage.removeItem(STORAGE_KEY);
+          renderPage();
+          renderEditForm();
+        }
+      };
+
+      editForm.onsubmit = (e) => {
+        e.preventDefault();
+
+        // Update basic fields
+        siteData.name = document.getElementById("edit-name").value;
+        siteData.tagline = document.getElementById("edit-tagline").value;
+        siteData.bio = document.getElementById("edit-bio").value;
+        siteData.email = document.getElementById("edit-email").value;
+        siteData.footer = document.getElementById("edit-footer").value;
+
+        // Update shows
+        siteData.shows = [];
+        document.querySelectorAll(".show-item").forEach((item) => {
+          const dateInput = item.querySelector('[data-show-field="date"]');
+          const venueInput = item.querySelector('[data-show-field="venue"]');
+          const cityInput = item.querySelector('[data-show-field="city"]');
+          const timeInput = item.querySelector('[data-show-field="time"]');
+
+          if (
+            dateInput.value &&
+            venueInput.value &&
+            cityInput.value &&
+            timeInput.value
+          ) {
+            siteData.shows.push({
+              date: dateInput.value,
+              venue: venueInput.value,
+              city: cityInput.value,
+              time: timeInput.value,
+            });
+          }
+        });
+
+        // Update social
+        siteData.social = {};
+        document.querySelectorAll(".social-item").forEach((item) => {
+          const platformInput = item.querySelector(
+            '[data-social-field="platform"]',
+          );
+          const urlInput = item.querySelector('[data-social-field="url"]');
+
+          if (platformInput.value && urlInput.value) {
+            siteData.social[platformInput.value] = urlInput.value;
+          }
+        });
+
+        // Save to localStorage
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData));
+
+        // Render and close
+        renderPage();
+        editModal.classList.remove("active");
+      };
+
+      // ============================================
+      // INITIAL RENDER
+      // ============================================
+      renderPage();
+      updateAdminUI();
+    </script>
+  </body>
+</html>
