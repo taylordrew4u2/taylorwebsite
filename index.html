@@ -928,14 +928,30 @@
 
         <!-- Instagram Management -->
         <div class="admin-section">
-          <h3>Instagram Posts</h3>
+          <h3>Instagram Feed</h3>
+          <div class="form-group">
+            <label>Instagram Username (without @)</label>
+            <input
+              type="text"
+              id="admin-instagram-username"
+              placeholder="taylordrew4u"
+              onchange="
+                siteData.instagramUsername = this.value;
+                renderContent();
+              "
+            />
+          </div>
           <p style="margin-bottom: 1rem; color: #666666; font-size: 0.9rem">
-            Add Instagram post URLs. Example:
-            https://www.instagram.com/p/C1234567890/embed/
+            Your Instagram posts will automatically load from your profile. You
+            can also manually add specific post URLs below:
           </p>
           <div id="instagram-form-container"></div>
-          <button class="btn btn-primary" onclick="addInstagramForm()">
-            + Add Instagram Post
+          <button
+            class="btn btn-secondary"
+            onclick="addInstagramForm()"
+            style="margin-top: 0.5rem"
+          >
+            + Add Manual Post URL
           </button>
         </div>
 
@@ -1019,10 +1035,8 @@
           instagram: "https://instagram.com/yourusername",
           twitter: "https://twitter.com/yourusername",
         },
-        instagramPosts: [
-          "https://www.instagram.com/p/C1234567890/embed/",
-          "https://www.instagram.com/reel/C0987654321/embed/",
-        ],
+        instagramUsername: "taylordrew4u",
+        instagramPosts: [],
         footer: "© 2025 Your Name. All rights reserved.",
       };
 
@@ -1180,32 +1194,8 @@
 
         // Instagram
         const instagramGrid = document.getElementById("instagram-grid");
-        if (siteData.instagramPosts && siteData.instagramPosts.length > 0) {
-          instagramGrid.innerHTML = siteData.instagramPosts
-            .map(
-              (postUrl) => `
-                    <div class="instagram-post">
-                        <iframe
-                            src="${postUrl}"
-                            width="100%"
-                            height="100%"
-                            frameborder="0"
-                            style="border-radius: 8px;"
-                            allowfullscreen=""
-                            aria-hidden="false"
-                            tabindex="0">
-                        </iframe>
-                    </div>
-                `,
-            )
-            .join("");
-          // Load Instagram embed script
-          if (window.instgrm) {
-            window.instgrm.Embeds.process();
-          }
-        } else {
-          instagramGrid.innerHTML =
-            '<div class="no-posts">No posts yet. Follow on Instagram @taylordrew4u</div>';
+        if (hash === "instagram" || isAdminMode()) {
+          loadInstagramFeed(instagramGrid);
         }
 
         // Contact
@@ -1305,6 +1295,10 @@
           preview.style.display = "block";
         }
 
+        // Instagram
+        document.getElementById("admin-instagram-username").value =
+          siteData.instagramUsername || "taylordrew4u";
+
         // Instagram Posts
         const instagramContainer = document.getElementById(
           "instagram-form-container",
@@ -1395,6 +1389,91 @@
         loadAdminForm();
       }
 
+      async function loadInstagramFeed(container) {
+        if (!siteData.instagramUsername) {
+          container.innerHTML = '<div class="no-posts">Instagram username not set</div>';
+          return;
+        }
+
+        container.innerHTML = '<div class="no-posts" style="opacity: 0.7;">Loading Instagram posts...</div>';
+
+        try {
+          let posts = [];
+
+          // If manual posts are set, use those first
+          if (siteData.instagramPosts && siteData.instagramPosts.length > 0) {
+            posts = siteData.instagramPosts.filter(url => url && url.trim());
+          }
+
+          // If no manual posts, try to fetch from Instagram profile
+          if (posts.length === 0) {
+            try {
+              const instagramResponse = await fetch(
+                `https://www.instagram.com/${siteData.instagramUsername}/?__a=1`,
+                { headers: { "User-Agent": "Mozilla/5.0" } }
+              );
+              
+              if (instagramResponse.ok) {
+                const data = await instagramResponse.json();
+                if (data.graphql?.user?.edge_owner_to_timeline_media?.edges) {
+                  posts = data.graphql.user.edge_owner_to_timeline_media.edges
+                    .slice(0, 12)
+                    .map((edge) => {
+                      const node = edge.node;
+                      return `https://www.instagram.com/p/${node.shortcode}/embed/`;
+                    });
+                }
+              }
+            } catch (e) {
+              // Fallback if API fails
+              console.log("Instagram API request info:", e.message);
+            }
+          }
+
+          if (posts.length > 0) {
+            container.innerHTML = posts
+              .map(
+                (postUrl) => `
+                      <div class="instagram-post">
+                          <iframe
+                              loading="lazy"
+                              src="${postUrl}"
+                              width="100%"
+                              height="100%"
+                              frameborder="0"
+                              style="border-radius: 8px;"
+                              allowfullscreen=""
+                              aria-hidden="false"
+                              tabindex="0">
+                          </iframe>
+                      </div>
+                  `,
+              )
+              .join("");
+
+            // Load Instagram embed script
+            setTimeout(() => {
+              if (window.instgrm) {
+                window.instgrm.Embeds.process();
+              }
+            }, 100);
+          } else {
+            container.innerHTML = `
+              <div class="no-posts">
+                <p>No posts found. Visit <a href="https://instagram.com/${siteData.instagramUsername}" target="_blank" style="color: #000000; text-decoration: underline;">@${siteData.instagramUsername}</a> on Instagram</p>
+              </div>
+            `;
+          }
+        } catch (error) {
+          console.log("Instagram feed loading info:", error);
+          container.innerHTML = `
+            <div class="no-posts">
+              <p>View posts on <a href="https://instagram.com/${siteData.instagramUsername}" target="_blank" style="color: #000000; text-decoration: underline;">@${siteData.instagramUsername}</a></p>
+            </div>
+          `;
+        }
+      }
+
       function saveAllChanges() {
         siteData.name = document.getElementById("admin-name").value;
         siteData.tagline = document.getElementById("admin-tagline").value;
@@ -1406,6 +1485,7 @@
           document.getElementById("admin-about-photo").value;
         siteData.email = document.getElementById("admin-email").value;
         siteData.footer = document.getElementById("admin-footer").value;
+        siteData.instagramUsername = document.getElementById("admin-instagram-username").value;
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData));
         renderContent();
