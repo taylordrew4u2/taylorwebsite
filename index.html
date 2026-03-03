@@ -1051,6 +1051,13 @@
       const defaultData = JSON.parse(JSON.stringify(siteData));
 
       // ============================================
+      // CHECK IF ON ADMIN PAGE
+      // ============================================
+      function isOnAdminPage() {
+        return window.location.hash === "#admin";
+      }
+
+      // ============================================
       // ADMIN UI MANAGEMENT
       // ============================================
       function updateAdminUI() {
@@ -1058,6 +1065,15 @@
         const adminStatus = document.getElementById("admin-status");
         const loginModal = document.getElementById("admin-login-modal");
 
+        // Only show admin UI if on /admin page
+        if (!isOnAdminPage()) {
+          editBtn.style.display = "none";
+          adminStatus.classList.remove("active");
+          loginModal.classList.add("hidden");
+          return;
+        }
+
+        // On admin page - show based on login status
         if (isAdminLoggedIn()) {
           editBtn.style.display = "flex";
           adminStatus.classList.add("active");
@@ -1262,6 +1278,10 @@
         if (confirm("Log out of admin mode?")) {
           setAdminLoggedIn(false);
           document.getElementById("admin-password").value = "";
+          // Redirect to home page after logout
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 300);
         }
       };
 
