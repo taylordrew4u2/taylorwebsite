@@ -39,7 +39,7 @@
            ============================================ */
       .header-nav {
         display: flex;
-        justify-content: space-between;
+        justify-content: center;
         align-items: center;
         padding: 1.5rem 0;
         border-bottom: 1px solid #e0e0e0;
@@ -702,7 +702,6 @@
          ============================================ -->
     <div class="container">
       <nav class="header-nav">
-        <div class="logo" onclick="goToPage('home')">My Comedy</div>
         <ul class="nav-links">
           <a href="#home" onclick="goToPage('home')" class="nav-home active"
             >Home</a
@@ -1391,18 +1390,20 @@
 
       async function loadInstagramFeed(container) {
         if (!siteData.instagramUsername) {
-          container.innerHTML = '<div class="no-posts">Instagram username not set</div>';
+          container.innerHTML =
+            '<div class="no-posts">Instagram username not set</div>';
           return;
         }
 
-        container.innerHTML = '<div class="no-posts" style="opacity: 0.7;">Loading Instagram posts...</div>';
+        container.innerHTML =
+          '<div class="no-posts" style="opacity: 0.7;">Loading Instagram posts...</div>';
 
         try {
           let posts = [];
 
           // If manual posts are set, use those first
           if (siteData.instagramPosts && siteData.instagramPosts.length > 0) {
-            posts = siteData.instagramPosts.filter(url => url && url.trim());
+            posts = siteData.instagramPosts.filter((url) => url && url.trim());
           }
 
           // If no manual posts, try to fetch from Instagram profile
@@ -1410,9 +1411,9 @@
             try {
               const instagramResponse = await fetch(
                 `https://www.instagram.com/${siteData.instagramUsername}/?__a=1`,
-                { headers: { "User-Agent": "Mozilla/5.0" } }
+                { headers: { "User-Agent": "Mozilla/5.0" } },
               );
-              
+
               if (instagramResponse.ok) {
                 const data = await instagramResponse.json();
                 if (data.graphql?.user?.edge_owner_to_timeline_media?.edges) {
@@ -1485,7 +1486,9 @@
           document.getElementById("admin-about-photo").value;
         siteData.email = document.getElementById("admin-email").value;
         siteData.footer = document.getElementById("admin-footer").value;
-        siteData.instagramUsername = document.getElementById("admin-instagram-username").value;
+        siteData.instagramUsername = document.getElementById(
+          "admin-instagram-username",
+        ).value;
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData));
         renderContent();
