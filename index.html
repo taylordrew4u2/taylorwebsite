@@ -241,6 +241,43 @@
         font-style: italic;
       }
 
+      /* INSTAGRAM PAGE */
+      .instagram-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+      }
+
+      .instagram-post {
+        aspect-ratio: 1;
+        overflow: hidden;
+        border-radius: 8px;
+        background-color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .instagram-post iframe {
+        max-width: 100%;
+        height: 100%;
+      }
+
+      .no-posts {
+        text-align: center;
+        color: #999999;
+        padding: 3rem;
+        font-style: italic;
+      }
+
+      @media (max-width: 768px) {
+        .instagram-grid {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+      }
+
       h2 {
         font-size: 2rem;
         margin-bottom: 2rem;
@@ -657,6 +694,7 @@
         }
       }
     </style>
+    <script async src="https://www.instagram.com/embed.js"></script>
   </head>
   <body>
     <!-- ============================================
@@ -674,6 +712,12 @@
           >
           <a href="#shows" onclick="goToPage('shows')" class="nav-shows"
             >Shows</a
+          >
+          <a
+            href="#instagram"
+            onclick="goToPage('instagram')"
+            class="nav-instagram"
+            >Instagram</a
           >
           <a href="#contact" onclick="goToPage('contact')" class="nav-contact"
             >Contact</a
@@ -747,6 +791,16 @@
         <h2>Upcoming Shows</h2>
         <div class="shows-container" id="shows-list">
           <div class="no-shows">No shows scheduled. Check back soon!</div>
+        </div>
+      </section>
+
+      <!-- INSTAGRAM PAGE -->
+      <section id="instagram" class="page">
+        <h2>Instagram</h2>
+        <div class="instagram-grid" id="instagram-grid">
+          <div class="no-posts">
+            No posts yet. Follow on Instagram @taylordrew4u
+          </div>
         </div>
       </section>
 
@@ -872,6 +926,19 @@
           </button>
         </div>
 
+        <!-- Instagram Management -->
+        <div class="admin-section">
+          <h3>Instagram Posts</h3>
+          <p style="margin-bottom: 1rem; color: #666666; font-size: 0.9rem">
+            Add Instagram post URLs. Example:
+            https://www.instagram.com/p/C1234567890/embed/
+          </p>
+          <div id="instagram-form-container"></div>
+          <button class="btn btn-primary" onclick="addInstagramForm()">
+            + Add Instagram Post
+          </button>
+        </div>
+
         <!-- Contact Info -->
         <div class="admin-section">
           <h3>Contact</h3>
@@ -952,6 +1019,10 @@
           instagram: "https://instagram.com/yourusername",
           twitter: "https://twitter.com/yourusername",
         },
+        instagramPosts: [
+          "https://www.instagram.com/p/C1234567890/embed/",
+          "https://www.instagram.com/reel/C0987654321/embed/",
+        ],
         footer: "© 2025 Your Name. All rights reserved.",
       };
 
@@ -1107,6 +1178,36 @@
             '<div class="no-shows">No shows scheduled. Check back soon!</div>';
         }
 
+        // Instagram
+        const instagramGrid = document.getElementById("instagram-grid");
+        if (siteData.instagramPosts && siteData.instagramPosts.length > 0) {
+          instagramGrid.innerHTML = siteData.instagramPosts
+            .map(
+              (postUrl) => `
+                    <div class="instagram-post">
+                        <iframe
+                            src="${postUrl}"
+                            width="100%"
+                            height="100%"
+                            frameborder="0"
+                            style="border-radius: 8px;"
+                            allowfullscreen=""
+                            aria-hidden="false"
+                            tabindex="0">
+                        </iframe>
+                    </div>
+                `,
+            )
+            .join("");
+          // Load Instagram embed script
+          if (window.instgrm) {
+            window.instgrm.Embeds.process();
+          }
+        } else {
+          instagramGrid.innerHTML =
+            '<div class="no-posts">No posts yet. Follow on Instagram @taylordrew4u</div>';
+        }
+
         // Contact
         document.getElementById("contact-email").href =
           `mailto:${siteData.email}`;
@@ -1203,6 +1304,21 @@
           preview.src = siteData.aboutPhoto;
           preview.style.display = "block";
         }
+
+        // Instagram Posts
+        const instagramContainer = document.getElementById(
+          "instagram-form-container",
+        );
+        instagramContainer.innerHTML = (siteData.instagramPosts || [])
+          .map(
+            (postUrl, idx) => `
+                <div class="social-form">
+                    <input type="url" placeholder="Instagram Post URL (e.g., https://www.instagram.com/p/ID/embed/)" value="${postUrl}" onchange="updateInstagramPost(${idx}, this.value)" style="flex: 1;">
+                    <button class="btn btn-danger btn-small" onclick="removeInstagramPost(${idx})"><i class="fas fa-trash"></i></button>
+                </div>
+            `,
+          )
+          .join("");
       }
 
       function updatePhotoPreview(type) {
@@ -1259,6 +1375,23 @@
       function addSocialForm() {
         if (!siteData.social) siteData.social = {};
         siteData.social["newplatform"] = "https://";
+        loadAdminForm();
+      }
+
+      function updateInstagramPost(idx, url) {
+        if (!siteData.instagramPosts) siteData.instagramPosts = [];
+        siteData.instagramPosts[idx] = url;
+      }
+
+      function removeInstagramPost(idx) {
+        if (!siteData.instagramPosts) siteData.instagramPosts = [];
+        siteData.instagramPosts.splice(idx, 1);
+        loadAdminForm();
+      }
+
+      function addInstagramForm() {
+        if (!siteData.instagramPosts) siteData.instagramPosts = [];
+        siteData.instagramPosts.push("https://www.instagram.com/p//embed/");
         loadAdminForm();
       }
 
