@@ -1,0 +1,1 @@
+Now implement the fastest, least fragile path to make the existing site fully editable by a non-technical admin. Show me the exact file changes one step at a time. Prioritize homepage, events, blog, featured artist content, nav, footer, SEO, and media management first.
