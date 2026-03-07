@@ -3,7 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Comedian</title>
+    <title id="page-title">Comedian</title>
+    <meta
+      name="description"
+      content="Stand-up comedian"
+      id="page-description"
+    />
+    <meta property="og:title" content="Comedian" id="og-title" />
+    <meta
+      property="og:description"
+      content="Stand-up comedian"
+      id="og-description"
+    />
+    <meta property="og:image" content="" id="og-image" />
+    <meta property="og:type" content="website" />
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -988,9 +1001,87 @@
         <!-- Shows Management -->
         <div class="admin-section">
           <h3>Upcoming Shows</h3>
+          <p style="margin-bottom: 1rem; color: #666666; font-size: 0.9rem">
+            Add your upcoming comedy shows. Shows will appear on the Shows page
+            in the order you add them.
+          </p>
           <div id="shows-form-container"></div>
           <button class="btn btn-primary" onclick="addShowForm()">
             + Add New Show
+          </button>
+        </div>
+
+        <!-- SEO & Meta Tags -->
+        <div class="admin-section">
+          <h3>SEO & Meta Tags</h3>
+          <p style="margin-bottom: 1rem; color: #666666; font-size: 0.9rem">
+            These settings control how your site appears in search engines and
+            social media shares.
+          </p>
+          <div class="form-group">
+            <label>Site Title (appears in browser tab)</label>
+            <input
+              type="text"
+              id="admin-site-title"
+              placeholder="Comedian - Your Name"
+            />
+          </div>
+          <div class="form-group">
+            <label>Site Description (appears in search results)</label>
+            <textarea
+              id="admin-site-description"
+              placeholder="Stand-up comedian performing at venues nationwide..."
+              rows="3"
+            ></textarea>
+          </div>
+          <div class="form-group">
+            <label>Social Media Share Image (Open Graph image)</label>
+            <input
+              type="text"
+              id="admin-og-image"
+              placeholder="https://example.com/share-image.jpg"
+            />
+            <p style="margin-top: 0.5rem; color: #666666; font-size: 0.85rem">
+              Recommended size: 1200x630 pixels
+            </p>
+          </div>
+        </div>
+
+        <!-- CTA Buttons -->
+        <div class="admin-section">
+          <h3>Home Page Call-to-Action Buttons</h3>
+          <p style="margin-bottom: 1rem; color: #666666; font-size: 0.9rem">
+            Add buttons that appear on your home page to encourage visitors to
+            take action.
+          </p>
+          <div id="cta-form-container"></div>
+          <button class="btn btn-primary" onclick="addCTAForm()">
+            + Add CTA Button
+          </button>
+        </div>
+
+        <!-- Featured Artists -->
+        <div class="admin-section">
+          <h3>Featured Artists</h3>
+          <p style="margin-bottom: 1rem; color: #666666; font-size: 0.9rem">
+            Showcase other comedians or artists you want to feature on your
+            site.
+          </p>
+          <div id="artists-form-container"></div>
+          <button class="btn btn-primary" onclick="addArtistForm()">
+            + Add Featured Artist
+          </button>
+        </div>
+
+        <!-- Blog/News Posts -->
+        <div class="admin-section">
+          <h3>News & Blog Posts</h3>
+          <p style="margin-bottom: 1rem; color: #666666; font-size: 0.9rem">
+            Share updates, announcements, and stories with your audience.
+          </p>
+          <div id="blog-form-container"></div>
+          <button class="btn btn-primary" onclick="addBlogForm()">
+            + Add New Post
           </button>
         </div>
 
@@ -1079,38 +1170,99 @@
       const STORAGE_KEY = "comedyWebsiteData";
 
       const defaultData = {
+        // SEO & Meta
+        siteTitle: "Comedian - Your Name",
+        siteDescription:
+          "Stand-up comedian performing at venues nationwide. Check out my upcoming shows and latest content.",
+        ogImage: "",
+
+        // Basic Info
         name: "Your Name",
         tagline: "Comedian | Storyteller | Funny Person",
         landingPhoto: "",
+
+        // CTA Buttons
+        ctaButtons: [
+          {
+            text: "View Shows",
+            link: "#shows",
+            style: "primary",
+          },
+          {
+            text: "Contact Me",
+            link: "#contact",
+            style: "secondary",
+          },
+        ],
+
+        // About
         bio: "I'm a stand-up comedian from [City]. I've performed at The Comedy Cellar, Laugh Factory, and festivals. I tell jokes about everyday life, relationships, and the absurdity of being human.",
         aboutPhoto: "",
-        email: "hello@yourname.com",
+
+        // Shows
         shows: [
           {
             date: "May 15, 2025",
             venue: "The Comedy Cellar",
             city: "New York, NY",
             time: "8:00 PM",
+            ticketLink: "",
           },
           {
             date: "May 22, 2025",
             venue: "Laugh Factory",
             city: "Los Angeles, CA",
             time: "9:30 PM",
+            ticketLink: "",
           },
         ],
+
+        // Featured Artists
+        artists: [],
+
+        // Blog/News
+        blogPosts: [],
+
+        // Instagram
+        instagramUsername: "taylordrew4u",
+        instagramPosts: [],
+
+        // Contact
+        email: "hello@yourname.com",
         social: {
           instagram: "https://instagram.com/yourusername",
           twitter: "https://twitter.com/yourusername",
         },
-        instagramUsername: "taylordrew4u",
-        instagramPosts: [],
+
+        // Footer
         footer: "© 2025 Your Name. All rights reserved.",
       };
 
       let siteData =
         JSON.parse(localStorage.getItem(STORAGE_KEY)) ||
         JSON.parse(JSON.stringify(defaultData));
+
+      // Migrate/merge new fields from defaultData (for backward compatibility)
+      function migrateData() {
+        let updated = false;
+        for (const key in defaultData) {
+          if (!(key in siteData)) {
+            siteData[key] = JSON.parse(JSON.stringify(defaultData[key]));
+            updated = true;
+          }
+        }
+        // Ensure shows have ticketLink field
+        if (siteData.shows) {
+          siteData.shows = siteData.shows.map((show) => ({
+            ...show,
+            ticketLink: show.ticketLink || "",
+          }));
+        }
+        if (updated) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData));
+        }
+      }
+      migrateData();
 
       // ============================================
       // ADMIN & AUTH
@@ -1219,6 +1371,28 @@
       // RENDER CONTENT
       // ============================================
       function renderContent() {
+        // SEO / Meta tags
+        if (siteData.siteTitle) {
+          document.getElementById("page-title").textContent =
+            siteData.siteTitle;
+          document
+            .getElementById("og-title")
+            .setAttribute("content", siteData.siteTitle);
+        }
+        if (siteData.siteDescription) {
+          document
+            .getElementById("page-description")
+            .setAttribute("content", siteData.siteDescription);
+          document
+            .getElementById("og-description")
+            .setAttribute("content", siteData.siteDescription);
+        }
+        if (siteData.ogImage) {
+          document
+            .getElementById("og-image")
+            .setAttribute("content", siteData.ogImage);
+        }
+
         // Home
         document.getElementById("home-name").textContent = siteData.name;
         document.getElementById("home-tagline").textContent = siteData.tagline;
@@ -1228,6 +1402,20 @@
           landingPhoto.style.display = "block";
         } else {
           landingPhoto.style.display = "none";
+        }
+
+        // CTA Buttons
+        const ctaButtonsContainer = document.getElementById("home-cta-buttons");
+        if (siteData.ctaButtons && siteData.ctaButtons.length > 0) {
+          ctaButtonsContainer.innerHTML = siteData.ctaButtons
+            .map((btn) => {
+              const btnClass =
+                btn.style === "primary" ? "btn-primary" : "btn-secondary";
+              return `<a href="${btn.link}" class="btn ${btnClass}">${btn.text}</a>`;
+            })
+            .join("");
+        } else {
+          ctaButtonsContainer.innerHTML = "";
         }
 
         // About
@@ -1251,6 +1439,7 @@
                         <div class="show-venue">${show.venue}</div>
                         <div class="show-location">${show.city}</div>
                         <div class="show-time">${show.time}</div>
+                        ${show.ticketLink ? `<a href="${show.ticketLink}" class="btn btn-primary btn-small" target="_blank">Get Tickets</a>` : ""}
                     </div>
                 `,
             )
@@ -1258,6 +1447,51 @@
         } else {
           showsList.innerHTML =
             '<div class="no-shows">No shows scheduled. Check back soon!</div>';
+        }
+
+        // Featured Artists
+        const artistsList = document.getElementById("artists-list");
+        if (siteData.artists && siteData.artists.length > 0) {
+          artistsList.innerHTML = siteData.artists
+            .map(
+              (artist) => `
+                    <div class="show-card">
+                        ${artist.photo ? `<img src="${artist.photo}" alt="${artist.name}" style="width: 100px; height: 100px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem;">` : ""}
+                        <div class="show-venue" style="font-size: 1.2rem; font-weight: 600;">${artist.name}</div>
+                        <div class="show-location">${artist.description || ""}</div>
+                        ${artist.website ? `<a href="${artist.website}" class="btn btn-secondary btn-small" target="_blank" style="margin-top: 0.5rem;">Visit Website</a>` : ""}
+                    </div>
+                `,
+            )
+            .join("");
+        } else {
+          artistsList.innerHTML =
+            '<div class="no-shows">No featured artists yet.</div>';
+        }
+
+        // Blog/News
+        const blogList = document.getElementById("blog-list");
+        if (siteData.blogPosts && siteData.blogPosts.length > 0) {
+          // Sort by date (newest first)
+          const sortedPosts = [...siteData.blogPosts].sort(
+            (a, b) => new Date(b.date) - new Date(a.date),
+          );
+          blogList.innerHTML = sortedPosts
+            .filter((post) => post.published !== false) // Only show published posts
+            .map(
+              (post) => `
+                    <div class="show-card">
+                        <div class="show-date">${post.date}</div>
+                        <div class="show-venue" style="font-size: 1.2rem; font-weight: 600; margin-bottom: 0.5rem;">${post.title}</div>
+                        <div class="show-location" style="margin-bottom: 1rem; white-space: pre-wrap;">${post.content || ""}</div>
+                        ${post.link ? `<a href="${post.link}" class="btn btn-secondary btn-small" target="_blank">Read More</a>` : ""}
+                    </div>
+                `,
+            )
+            .join("");
+        } else {
+          blogList.innerHTML =
+            '<div class="no-shows">No posts published yet.</div>';
         }
 
         // Instagram
@@ -1305,30 +1539,116 @@
       // ADMIN FORM MANAGEMENT
       // ============================================
       function loadAdminForm() {
-        document.getElementById("admin-name").value = siteData.name;
-        document.getElementById("admin-tagline").value = siteData.tagline;
+        // Basic Info
+        document.getElementById("admin-name").value = siteData.name || "";
+        document.getElementById("admin-tagline").value = siteData.tagline || "";
         document.getElementById("admin-landing-photo").value =
-          siteData.landingPhoto;
-        document.getElementById("admin-bio").value = siteData.bio;
+          siteData.landingPhoto || "";
+        document.getElementById("admin-bio").value = siteData.bio || "";
         document.getElementById("admin-about-photo").value =
-          siteData.aboutPhoto;
-        document.getElementById("admin-email").value = siteData.email;
-        document.getElementById("admin-footer").value = siteData.footer;
+          siteData.aboutPhoto || "";
+        document.getElementById("admin-email").value = siteData.email || "";
+        document.getElementById("admin-footer").value = siteData.footer || "";
+
+        // SEO & Meta
+        document.getElementById("admin-site-title").value =
+          siteData.siteTitle || "";
+        document.getElementById("admin-site-description").value =
+          siteData.siteDescription || "";
+        document.getElementById("admin-og-image").value =
+          siteData.ogImage || "";
 
         // Shows
         const showsContainer = document.getElementById("shows-form-container");
-        showsContainer.innerHTML = siteData.shows
+        showsContainer.innerHTML = (siteData.shows || [])
           .map(
             (show, idx) => `
                 <div class="show-form">
                     <div class="show-form-grid">
-                        <input type="text" placeholder="Date" value="${show.date}" onchange="updateShow(${idx}, 'date', this.value)">
-                        <input type="text" placeholder="Time" value="${show.time}" onchange="updateShow(${idx}, 'time', this.value)">
-                        <input type="text" placeholder="Venue" value="${show.venue}" onchange="updateShow(${idx}, 'venue', this.value)">
-                        <input type="text" placeholder="City, State" value="${show.city}" onchange="updateShow(${idx}, 'city', this.value)">
+                        <input type="text" placeholder="Date (e.g., May 15, 2025)" value="${show.date || ""}" onchange="updateShow(${idx}, 'date', this.value)">
+                        <input type="text" placeholder="Time (e.g., 8:00 PM)" value="${show.time || ""}" onchange="updateShow(${idx}, 'time', this.value)">
+                        <input type="text" placeholder="Venue Name" value="${show.venue || ""}" onchange="updateShow(${idx}, 'venue', this.value)">
+                        <input type="text" placeholder="City, State" value="${show.city || ""}" onchange="updateShow(${idx}, 'city', this.value)">
+                        <input type="url" placeholder="Ticket Link (optional)" value="${show.ticketLink || ""}" onchange="updateShow(${idx}, 'ticketLink', this.value)" style="grid-column: 1 / -1;">
                     </div>
                     <div class="show-form-actions">
                         <button class="btn btn-danger btn-small" onclick="removeShow(${idx})"><i class="fas fa-trash"></i> Remove</button>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+
+        // CTA Buttons
+        const ctaContainer = document.getElementById("cta-form-container");
+        ctaContainer.innerHTML = (siteData.ctaButtons || [])
+          .map(
+            (btn, idx) => `
+                <div class="show-form">
+                    <div class="show-form-grid">
+                        <input type="text" placeholder="Button Text" value="${btn.text || ""}" onchange="updateCTA(${idx}, 'text', this.value)">
+                        <input type="text" placeholder="Link (e.g., #shows or https://...)" value="${btn.link || ""}" onchange="updateCTA(${idx}, 'link', this.value)">
+                        <select onchange="updateCTA(${idx}, 'style', this.value)">
+                            <option value="primary" ${btn.style === "primary" ? "selected" : ""}>Primary Style</option>
+                            <option value="secondary" ${btn.style === "secondary" ? "selected" : ""}>Secondary Style</option>
+                        </select>
+                    </div>
+                    <div class="show-form-actions">
+                        <button class="btn btn-danger btn-small" onclick="removeCTA(${idx})"><i class="fas fa-trash"></i> Remove</button>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+
+        // Featured Artists
+        const artistsContainer = document.getElementById(
+          "artists-form-container",
+        );
+        artistsContainer.innerHTML = (siteData.artists || [])
+          .map(
+            (artist, idx) => `
+                <div class="show-form" style="border-left: 3px solid #666;">
+                    <div class="form-group">
+                        <input type="text" placeholder="Artist Name" value="${artist.name || ""}" onchange="updateArtist(${idx}, 'name', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Description" onchange="updateArtist(${idx}, 'description', this.value)" rows="2">${artist.description || ""}</textarea>
+                    </div>
+                    <div class="show-form-grid">
+                        <input type="url" placeholder="Photo URL (optional)" value="${artist.photo || ""}" onchange="updateArtist(${idx}, 'photo', this.value)">
+                        <input type="url" placeholder="Website (optional)" value="${artist.website || ""}" onchange="updateArtist(${idx}, 'website', this.value)">
+                    </div>
+                    <div class="show-form-actions">
+                        <button class="btn btn-danger btn-small" onclick="removeArtist(${idx})"><i class="fas fa-trash"></i> Remove</button>
+                    </div>
+                </div>
+            `,
+          )
+          .join("");
+
+        // Blog Posts
+        const blogContainer = document.getElementById("blog-form-container");
+        blogContainer.innerHTML = (siteData.blogPosts || [])
+          .map(
+            (post, idx) => `
+                <div class="show-form" style="border-left: 3px solid ${post.published === false ? "#ff6b6b" : "#51cf66"};">
+                    <div class="form-group">
+                        <input type="text" placeholder="Post Title" value="${post.title || ""}" onchange="updateBlogPost(${idx}, 'title', this.value)">
+                    </div>
+                    <div class="form-group">
+                        <textarea placeholder="Post Content" onchange="updateBlogPost(${idx}, 'content', this.value)" rows="4">${post.content || ""}</textarea>
+                    </div>
+                    <div class="show-form-grid">
+                        <input type="text" placeholder="Date (e.g., March 7, 2026)" value="${post.date || ""}" onchange="updateBlogPost(${idx}, 'date', this.value)">
+                        <input type="url" placeholder="Read More Link (optional)" value="${post.link || ""}" onchange="updateBlogPost(${idx}, 'link', this.value)">
+                        <label style="display: flex; align-items: center; gap: 0.5rem;">
+                            <input type="checkbox" ${post.published !== false ? "checked" : ""} onchange="updateBlogPost(${idx}, 'published', this.checked)">
+                            Published
+                        </label>
+                    </div>
+                    <div class="show-form-actions">
+                        <button class="btn btn-danger btn-small" onclick="removeBlogPost(${idx})"><i class="fas fa-trash"></i> Remove</button>
                     </div>
                 </div>
             `,
@@ -1414,7 +1734,87 @@
 
       function addShowForm() {
         if (!siteData.shows) siteData.shows = [];
-        siteData.shows.push({ date: "", venue: "", city: "", time: "" });
+        siteData.shows.push({
+          date: "",
+          venue: "",
+          city: "",
+          time: "",
+          ticketLink: "",
+        });
+        loadAdminForm();
+      }
+
+      // CTA Button Management
+      function updateCTA(idx, field, value) {
+        if (!siteData.ctaButtons) siteData.ctaButtons = [];
+        siteData.ctaButtons[idx] = siteData.ctaButtons[idx] || {};
+        siteData.ctaButtons[idx][field] = value;
+      }
+
+      function removeCTA(idx) {
+        siteData.ctaButtons.splice(idx, 1);
+        loadAdminForm();
+      }
+
+      function addCTAForm() {
+        if (!siteData.ctaButtons) siteData.ctaButtons = [];
+        siteData.ctaButtons.push({
+          text: "Button Text",
+          link: "#",
+          style: "primary",
+        });
+        loadAdminForm();
+      }
+
+      // Featured Artists Management
+      function updateArtist(idx, field, value) {
+        if (!siteData.artists) siteData.artists = [];
+        siteData.artists[idx] = siteData.artists[idx] || {};
+        siteData.artists[idx][field] = value;
+      }
+
+      function removeArtist(idx) {
+        siteData.artists.splice(idx, 1);
+        loadAdminForm();
+      }
+
+      function addArtistForm() {
+        if (!siteData.artists) siteData.artists = [];
+        siteData.artists.push({
+          name: "",
+          description: "",
+          photo: "",
+          website: "",
+        });
+        loadAdminForm();
+      }
+
+      // Blog Post Management
+      function updateBlogPost(idx, field, value) {
+        if (!siteData.blogPosts) siteData.blogPosts = [];
+        siteData.blogPosts[idx] = siteData.blogPosts[idx] || {};
+        siteData.blogPosts[idx][field] = value;
+      }
+
+      function removeBlogPost(idx) {
+        siteData.blogPosts.splice(idx, 1);
+        loadAdminForm();
+      }
+
+      function addBlogForm() {
+        if (!siteData.blogPosts) siteData.blogPosts = [];
+        const today = new Date().toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        siteData.blogPosts.push({
+          title: "",
+          content: "",
+          date: today,
+          link: "",
+          published: true,
+        });
         loadAdminForm();
       }
 
@@ -1558,6 +1958,13 @@
         siteData.instagramUsername = document.getElementById(
           "admin-instagram-username",
         ).value;
+
+        // SEO Fields
+        siteData.siteTitle = document.getElementById("admin-site-title").value;
+        siteData.siteDescription = document.getElementById(
+          "admin-site-description",
+        ).value;
+        siteData.ogImage = document.getElementById("admin-og-image").value;
 
         localStorage.setItem(STORAGE_KEY, JSON.stringify(siteData));
         renderContent();
